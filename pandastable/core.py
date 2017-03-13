@@ -2868,9 +2868,11 @@ class Table(Canvas):
         self.cols = self.model.getColumnCount()
         self.tablewidth = (self.cellwidth)*self.cols
         if hasattr(self, 'tablecolheader'):
+            self.tablecolheader.destroy()
+            self.rowheader.destroy()
             self.selectNone()
-        else:
-            self.show()
+        self.show()
+        return
 
     def new(self):
         """Clears all the data and makes a new table"""
