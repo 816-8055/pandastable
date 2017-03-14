@@ -42,13 +42,8 @@ class ColumnHeader(Canvas):
         self.thefont='Arial 14'
         if table != None:
             self.table = table
-            self.model = self.table.model
-            if util.check_multiindex(self.model.df.columns) == 1:
-                self.height = 40
-            else:
-                self.height = 20
+            self.updateModel()
             self.config(width=self.table.width, height=self.height)
-            self.columnlabels = self.model.df.columns
             self.draggedcol = None
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
@@ -67,6 +62,16 @@ class ColumnHeader(Canvas):
             self.thefont = self.table.thefont
             self.setDefaults()
         return
+
+    def updateModel(self, model=None):
+        if model is None:
+            model = self.table.model
+        self.model = self.table.model
+        if util.check_multiindex(self.model.df.columns) == 1:
+            self.height = 40
+        else:
+            self.height = 20
+        self.columnlabels = self.model.df.columns
 
     def setDefaults(self):
         self.colselectedcolor = '#0099CC'
@@ -433,7 +438,7 @@ class RowHeader(Canvas):
             self.maxwidth = 200
             self.config(height = self.table.height)
             self.startrow = self.endrow = None
-            self.model = self.table.model
+            self.updateModel()
             self.bind('<Button-1>',self.handle_left_click)
             self.bind("<ButtonRelease-1>", self.handle_left_release)
             self.bind("<Control-Button-1>", self.handle_left_ctrl_click)
@@ -441,6 +446,11 @@ class RowHeader(Canvas):
             self.bind('<B1-Motion>', self.handle_mouse_drag)
             self.bind('<Shift-Button-1>', self.handle_left_shift_click)
         return
+
+    def updateModel(self, model=None):
+        if model is None:
+            model = self.table.model
+        self.model = self.table.model
 
     def redraw(self, align='w', showkeys=False):
         """Redraw row header"""

@@ -94,15 +94,10 @@ class Table(tk.Canvas):
             self.__dict__[key] = kwargs[key]
 
         if dataframe is not None:
-            self.model = TableModel(dataframe=dataframe)
-        elif model is not None:
-            self.model = model
-        else:
-            self.model = TableModel(rows=rows, columns=cols)
-
-        self.rows = self.model.getRowCount()
-        self.cols = self.model.getColumnCount()
-        self.tablewidth = (self.cellwidth)*self.cols
+            model = TableModel(dataframe=dataframe)
+        elif model is None:
+            model = TableModel(rows=rows, columns=cols)
+        self.updateModel(model)
         self.doBindings()
 
         # column specific actions, define for every column type in the model
@@ -2060,7 +2055,6 @@ Proceed?""",
         newtable = self.__class__(win, dataframe=df, showtoolbar=0,
                                   showstatusbar=1)
         newtable.parenttable = self
-        newtable.adjustColumnWidths()
         newtable.show()
         toolbar = ChildToolBar(win, newtable)
         toolbar.grid(row=0, column=3, rowspan=2, sticky='news')
@@ -2931,10 +2925,12 @@ Proceed?""",
         self.cols = self.model.getColumnCount()
         self.tablewidth = (self.cellwidth)*self.cols
         if hasattr(self, 'tablecolheader'):
-            self.tablecolheader.destroy()
-            self.rowheader.destroy()
+            self.tablecolheader.updateModel()
+            self.rowheader.updateModel()
             self.selectNone()
-        self.show()
+            self.adjustColumnWidths()
+        else:
+            self.show()
         return
 
     def new(self):
@@ -2970,7 +2966,6 @@ Proceed?""",
             model.load(filename, filetype)
             self.updateModel(model)
             self.filename = filename
-            self.adjustColumnWidths()
             self.redraw()
         return
 
