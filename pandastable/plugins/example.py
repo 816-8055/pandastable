@@ -20,12 +20,14 @@
 """
 
 from __future__ import absolute_import, division, print_function
-from tkinter import *
-import tkinter
 try:
     from tkinter.ttk import *
+    import tkinter as tk
+    from tkinter import *
 except:
     from ttk import *
+    import Tkinter as tk
+    from Tkinter import *
 from pandastable.plugin import Plugin
 
 class ExamplePlugin(Plugin):
