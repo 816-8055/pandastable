@@ -84,7 +84,12 @@ The basics for now. More details to be added here.
 
 Create a parent frame and then add the table to it:
 ```
-from tkinter import *
+try:
+	# python 3
+	from tkinter import *
+except ImportError:
+	# python 2
+	from Tkinter import *
 from pandastable import Table
 #assuming parent is the frame in which you want to place the table
 pt = Table(parent)
